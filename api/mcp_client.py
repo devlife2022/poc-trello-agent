@@ -35,7 +35,7 @@ class MCPClient:
                 logger.info(f"Connecting to MCP server via HTTP: {settings.mcp_server_url}")
                 self._http_client = httpx.AsyncClient(base_url=settings.mcp_server_url, timeout=30.0)
 
-                # FastMCP's http_app uses JSON-RPC over HTTP POST
+                # FastMCP HTTP transport uses JSON-RPC at /mcp/ endpoint
                 # Initialize connection
                 init_request = {
                     "jsonrpc": "2.0",
@@ -47,7 +47,7 @@ class MCPClient:
                         "clientInfo": {"name": "trello-ai-backend", "version": "1.0.0"}
                     }
                 }
-                response = await self._http_client.post("/", json=init_request)
+                response = await self._http_client.post("/mcp/", json=init_request)
                 response.raise_for_status()
 
                 # List tools
@@ -57,7 +57,7 @@ class MCPClient:
                     "method": "tools/list",
                     "params": {}
                 }
-                response = await self._http_client.post("/", json=tools_request)
+                response = await self._http_client.post("/mcp/", json=tools_request)
                 response.raise_for_status()
                 tools_response = response.json()
 
@@ -157,7 +157,7 @@ class MCPClient:
             logger.info(f"Executing tool: {tool_name} with input: {tool_input}")
 
             if self._use_http:
-                # Execute via HTTP using JSON-RPC
+                # Execute via HTTP using JSON-RPC at /mcp/ endpoint
                 tool_request = {
                     "jsonrpc": "2.0",
                     "id": 3,
@@ -167,7 +167,7 @@ class MCPClient:
                         "arguments": tool_input
                     }
                 }
-                response = await self._http_client.post("/", json=tool_request)
+                response = await self._http_client.post("/mcp/", json=tool_request)
                 response.raise_for_status()
                 rpc_response = response.json()
 

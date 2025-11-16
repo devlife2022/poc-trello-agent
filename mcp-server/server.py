@@ -158,11 +158,9 @@ if __name__ == "__main__":
     port = os.getenv("PORT")
 
     if port:
-        # Production: Run as HTTP server
-        import uvicorn
-        print(f"Starting MCP server in HTTP mode on port {port}")
-        # FastMCP provides http_app for HTTP transport
-        uvicorn.run(mcp.http_app, host="0.0.0.0", port=int(port))
+        # Production: Run with HTTP transport
+        print(f"Starting MCP server with HTTP transport on port {port}")
+        mcp.run(transport="http", host="0.0.0.0", port=int(port))
     else:
         # Local development: Run in STDIO mode for Claude Desktop
         print("Starting MCP server in STDIO mode")
