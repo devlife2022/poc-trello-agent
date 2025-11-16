@@ -152,5 +152,17 @@ def create_trello_card(
 
 
 if __name__ == "__main__":
-    # Run the MCP server
-    mcp.run()
+    import os
+
+    # Check if running in production (Render)
+    port = os.getenv("PORT")
+
+    if port:
+        # Production: Run as HTTP server
+        import uvicorn
+        print(f"Starting MCP server in HTTP mode on port {port}")
+        uvicorn.run(mcp.get_asgi_app(), host="0.0.0.0", port=int(port))
+    else:
+        # Local development: Run in STDIO mode for Claude Desktop
+        print("Starting MCP server in STDIO mode")
+        mcp.run()
