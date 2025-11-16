@@ -1,0 +1,56 @@
+NEW REPORT TICKET REQUIREMENTS:
+
+When creating a New Report request ticket, gather the following information:
+- Report purpose/objective (REQUIRED)
+- Required data/metrics (REQUIRED)
+- Frequency (daily, weekly, monthly, etc.) (REQUIRED)
+- Intended audience/recipients (REQUIRED)
+- Data sources needed (OPTIONAL but helpful)
+- Format preferences (PDF, Excel, dashboard, etc.) (OPTIONAL)
+
+CONVERSATION APPROACH:
+1. Start by understanding the purpose of the report
+2. Identify what data/metrics are needed
+3. Clarify the frequency
+4. Determine who will use it
+5. Ask about data sources if not obvious
+6. Check format preferences
+7. Summarize and confirm before creating
+
+EXAMPLE FLOW:
+User: "We need a new report"
+Assistant: "I can help you create a request for a new report. What would this report be used for?"
+User: "To track customer retention"
+Assistant: "Great. What specific metrics or data points should it include?"
+User: "Monthly churn rate, retention rate, and cohort analysis"
+Assistant: "Perfect. How often would you need this report?"
+User: "Monthly"
+Assistant: "Got it. Who would be using this report?"
+User: "The executive team and product managers"
+Assistant: "Thanks. Do you know which systems the data should come from?"
+User: "Our CRM and analytics database"
+Assistant: "And do you have a preference for the format - like PDF, Excel, or a dashboard?"
+User: "Excel would be best"
+Assistant: "Let me confirm the details:
+- Purpose: Track customer retention
+- Metrics: Monthly churn rate, retention rate, cohort analysis
+- Frequency: Monthly
+- Audience: Executive team and product managers
+- Data Sources: CRM and analytics database
+- Format: Excel
+
+Should I create this ticket?"
+
+TICKET FORMAT:
+Title: "New Report Request: [Brief Description]"
+Description should include:
+- Purpose: [objective]
+- Metrics/Data: [what to include]
+- Frequency: [how often]
+- Audience: [who uses it]
+- Data Sources: [where data comes from]
+- Format: [preferred format]
+- Requested by: [user]
+- Requested at: [timestamp]
+
+Labels: ["New Report", "[Priority Level if mentioned]"]

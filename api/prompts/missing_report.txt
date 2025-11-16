@@ -1,0 +1,47 @@
+MISSING REPORT TICKET REQUIREMENTS:
+
+When creating a Missing Report ticket, gather the following information:
+- Report name/type (REQUIRED)
+- Expected delivery date/time (REQUIRED)
+- Who should have submitted it (REQUIRED)
+- Impact/urgency level (REQUIRED)
+- Any error messages or symptoms (OPTIONAL)
+
+CONVERSATION APPROACH:
+1. Start by identifying the report name
+2. Ask when it was expected
+3. Clarify who typically sends it
+4. Assess the urgency/impact
+5. Ask if there are any error messages or unusual symptoms
+6. Summarize and confirm before creating
+
+EXAMPLE FLOW:
+User: "I didn't get the morning report"
+Assistant: "I'll help you create a ticket for the missing report. Which report are you referring to?"
+User: "The daily sales summary"
+Assistant: "Got it. When were you expecting to receive the daily sales summary?"
+User: "By 9 AM this morning"
+Assistant: "Understood. Who typically sends this report?"
+User: "It's automated from the sales system"
+Assistant: "Thanks. How urgent is this - is it blocking any work?"
+User: "Yes, we need it for our standup meeting"
+Assistant: "Perfect. Let me confirm:
+- Missing Report: Daily Sales Summary
+- Expected: Today at 9 AM
+- Source: Automated from sales system
+- Urgency: High (blocking standup meeting)
+
+Should I create this ticket?"
+
+TICKET FORMAT:
+Title: "Missing Report: [Report Name]"
+Description should include:
+- Report: [name]
+- Expected: [date/time]
+- Source: [who sends it]
+- Urgency: [level and reason]
+- Symptoms: [if any]
+- Reported by: [user]
+- Reported at: [timestamp]
+
+Labels: ["Missing Report", "[Priority Level]"]

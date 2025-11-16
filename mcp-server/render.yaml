@@ -1,0 +1,22 @@
+services:
+  # MCP Server
+  - type: web
+    name: trello-ai-mcp
+    runtime: python
+    region: oregon
+    plan: free
+    branch: main
+    rootDir: mcp-server
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    envVars:
+      - key: TRELLO_API_KEY
+        sync: false
+      - key: TRELLO_API_TOKEN
+        sync: false
+      - key: TRELLO_DEFAULT_BOARD_ID
+        sync: false
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: PORT
+        value: 8080
