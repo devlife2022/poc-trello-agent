@@ -1,9 +1,10 @@
 """
 MCP client for executing tools via the FastMCP server.
+Supports both STDIO (local) and HTTP (production) modes.
 """
 from typing import Any, Dict, List, Optional
 import logging
-import asyncio
+import httpx
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 from config import settings
@@ -20,6 +21,8 @@ class MCPClient:
         self.tools: List[Dict[str, Any]] = []
         self._connected = False
         self._stdio_context = None
+        self._http_client: Optional[httpx.AsyncClient] = None
+        self._use_http = bool(settings.mcp_server_url)
 
     async def connect(self) -> None:
         """Connect to the MCP server."""
@@ -27,30 +30,45 @@ class MCPClient:
             return
 
         try:
-            # Set up server parameters
-            # Note: MCP server loads Trello credentials from its own .env file
-            server_params = StdioServerParameters(
-                command=settings.mcp_server_command,
-                args=settings.mcp_server_args_list
-            )
+            if self._use_http:
+                # Production: Connect via HTTP
+                logger.info(f"Connecting to MCP server via HTTP: {settings.mcp_server_url}")
+                self._http_client = httpx.AsyncClient(base_url=settings.mcp_server_url, timeout=30.0)
 
-            # Connect to server using context manager
-            self._stdio_context = stdio_client(server_params)
-            read, write = await self._stdio_context.__aenter__()
+                # Fetch tools from HTTP endpoint
+                response = await self._http_client.get("/mcp/v1/tools")
+                response.raise_for_status()
+                tools_data = response.json()
 
-            # Create session
-            self.session = ClientSession(read, write)
-            await self.session.__aenter__()
+                # Convert to Claude format
+                self.tools = tools_data.get("tools", [])
+                self._connected = True
+                logger.info(f"Connected to MCP server via HTTP, loaded {len(self.tools)} tools")
+            else:
+                # Local: Connect via STDIO
+                logger.info("Connecting to MCP server via STDIO")
+                server_params = StdioServerParameters(
+                    command=settings.mcp_server_command,
+                    args=settings.mcp_server_args_list
+                )
 
-            # Initialize and list tools
-            await self.session.initialize()
-            tools_list = await self.session.list_tools()
+                # Connect to server using context manager
+                self._stdio_context = stdio_client(server_params)
+                read, write = await self._stdio_context.__aenter__()
 
-            # Convert MCP tools to Claude-compatible format
-            self.tools = self._convert_tools_to_claude_format(tools_list.tools)
+                # Create session
+                self.session = ClientSession(read, write)
+                await self.session.__aenter__()
 
-            self._connected = True
-            logger.info(f"Connected to MCP server, loaded {len(self.tools)} tools")
+                # Initialize and list tools
+                await self.session.initialize()
+                tools_list = await self.session.list_tools()
+
+                # Convert MCP tools to Claude-compatible format
+                self.tools = self._convert_tools_to_claude_format(tools_list.tools)
+
+                self._connected = True
+                logger.info(f"Connected to MCP server via STDIO, loaded {len(self.tools)} tools")
 
         except Exception as e:
             logger.error(f"Failed to connect to MCP server: {e}")
@@ -59,6 +77,8 @@ class MCPClient:
     async def disconnect(self) -> None:
         """Disconnect from the MCP server."""
         try:
+            if self._http_client:
+                await self._http_client.aclose()
             if self.session:
                 await self.session.__aexit__(None, None, None)
             if self._stdio_context:
@@ -103,14 +123,28 @@ class MCPClient:
         Raises:
             Exception: If tool execution fails
         """
-        if not self._connected or not self.session:
+        if not self._connected:
             await self.connect()
 
         try:
             logger.info(f"Executing tool: {tool_name} with input: {tool_input}")
-            result = await self.session.call_tool(tool_name, tool_input)
-            logger.debug(f"Tool {tool_name} result: {result}")
-            return result.content
+
+            if self._use_http:
+                # Execute via HTTP
+                response = await self._http_client.post(
+                    f"/mcp/v1/tools/{tool_name}/call",
+                    json=tool_input
+                )
+                response.raise_for_status()
+                result = response.json()
+                logger.debug(f"Tool {tool_name} result: {result}")
+                return result
+            else:
+                # Execute via STDIO
+                result = await self.session.call_tool(tool_name, tool_input)
+                logger.debug(f"Tool {tool_name} result: {result}")
+                return result.content
+
         except Exception as e:
             logger.error(f"Error executing tool {tool_name}: {e}")
             raise

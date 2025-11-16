@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     # MCP Server Configuration
     mcp_server_command: str = "python"
     mcp_server_args: str = "../mcp-server/server.py"
+    mcp_server_url: str = ""  # HTTP URL for production (e.g., https://trello-ai-mcp.onrender.com)
 
     # API Configuration
     cors_origins: str = "http://localhost:5173,http://localhost:3000"
