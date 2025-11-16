@@ -21,7 +21,7 @@ services:
       - key: MCP_SERVER_URL
         value: https://trello-ai-mcp.onrender.com/mcp
       - key: CORS_ORIGINS
-        value: https://YOUR_GITHUB_USERNAME.github.io
+        value: https://devlife2022.github.io
       - key: PYTHON_VERSION
         value: 3.11.0
     healthCheckPath: /api/health

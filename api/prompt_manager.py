@@ -36,7 +36,7 @@ class PromptManager:
                 self.base_prompt = self._get_fallback_base_prompt()
 
             # Load request type prompts
-            request_types = ["missing_report", "new_report", "it_support"]
+            request_types = ["missing_report", "new_report", "it_support", "enhancement_request"]
             for request_type in request_types:
                 prompt_path = self.prompts_dir / f"{request_type}.txt"
                 if prompt_path.exists():
@@ -60,7 +60,7 @@ Be conversational, ask clarifying questions, and confirm details before taking a
         Get the complete system prompt, optionally including request-type specific instructions.
 
         Args:
-            request_type: Optional request type (missing_report, new_report, it_support)
+            request_type: Optional request type (missing_report, new_report, it_support, enhancement_request)
 
         Returns:
             Complete system prompt

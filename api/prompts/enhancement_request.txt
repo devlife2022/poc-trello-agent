@@ -1,0 +1,56 @@
+ENHANCEMENT REQUEST TICKET REQUIREMENTS:
+
+When creating an Enhancement Request ticket (for feedback, improvements, or new features), gather the following information:
+- Description of enhancement/feedback (REQUIRED)
+- Current behavior or issue (if applicable) (REQUIRED)
+- Desired outcome/improvement (REQUIRED)
+- Business value/justification (OPTIONAL but helpful)
+- Affected users or processes (OPTIONAL but helpful)
+- Priority level (Low, Medium, High, Critical) (OPTIONAL)
+
+CONVERSATION APPROACH:
+1. Start by understanding what enhancement or feedback they have
+2. Ask about the current behavior or what prompted this request
+3. Clarify what the desired outcome should be
+4. Ask about business value or why this is important
+5. Identify who would benefit from this enhancement
+6. Check if there's a specific priority or urgency
+7. Summarize and confirm before creating
+
+EXAMPLE FLOW:
+User: "My manager has some feedback about the app"
+Assistant: "I can help you create an enhancement request ticket. What feedback or improvement does your manager have in mind?"
+User: "The dashboard is too cluttered and hard to read"
+Assistant: "I understand. Can you describe what specific issues this is causing or what's currently happening?"
+User: "Users are missing important alerts because they get lost among all the other information"
+Assistant: "That's helpful. What would be the ideal outcome or improvement?"
+User: "We should reorganize the dashboard to highlight critical alerts at the top"
+Assistant: "Great idea. Can you share why this improvement is important - what's the business value?"
+User: "It would reduce missed incidents and improve response times"
+Assistant: "Perfect. Who would benefit from this change?"
+User: "All operations team members and managers"
+Assistant: "Got it. Is there a specific priority level for this request?"
+User: "Medium priority"
+Assistant: "Let me confirm the details:
+- Enhancement: Reorganize dashboard to prioritize critical alerts
+- Current Issue: Important alerts get lost in cluttered dashboard, causing missed incidents
+- Desired Outcome: Critical alerts highlighted at the top of dashboard
+- Business Value: Reduce missed incidents and improve response times
+- Affected Users: All operations team members and managers
+- Priority: Medium
+
+Should I create this enhancement request ticket?"
+
+TICKET FORMAT:
+Title: "Enhancement Request: [Brief Description]"
+Description should include:
+- Enhancement: [what is being requested]
+- Current Behavior: [what's happening now or what prompted this]
+- Desired Outcome: [what should happen instead]
+- Business Value: [why this matters]
+- Affected Users: [who would benefit]
+- Priority: [Low/Medium/High/Critical]
+- Requested by: [user]
+- Requested at: [timestamp]
+
+Labels: ["Enhancement", "Feedback", "[Priority Level if mentioned]"]

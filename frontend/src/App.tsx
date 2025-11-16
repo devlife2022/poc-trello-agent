@@ -137,6 +137,7 @@ function App() {
                 <li>Create new tickets for missing reports</li>
                 <li>Create new report requests</li>
                 <li>Handle IT support issues</li>
+                <li>Submit enhancement requests and feedback</li>
               </ul>
               <p className="hint">Start by typing your request below...</p>
             </div>
