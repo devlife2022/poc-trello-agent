@@ -161,7 +161,8 @@ if __name__ == "__main__":
         # Production: Run as HTTP server
         import uvicorn
         print(f"Starting MCP server in HTTP mode on port {port}")
-        uvicorn.run(mcp.get_asgi_app(), host="0.0.0.0", port=int(port))
+        # FastMCP exposes the app directly
+        uvicorn.run(mcp.app, host="0.0.0.0", port=int(port))
     else:
         # Local development: Run in STDIO mode for Claude Desktop
         print("Starting MCP server in STDIO mode")
