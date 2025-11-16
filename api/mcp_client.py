@@ -33,7 +33,14 @@ class MCPClient:
             if self._use_http:
                 # Production: Connect via HTTP
                 logger.info(f"Connecting to MCP server via HTTP: {settings.mcp_server_url}")
-                self._http_client = httpx.AsyncClient(base_url=settings.mcp_server_url, timeout=30.0)
+                self._http_client = httpx.AsyncClient(
+                    base_url=settings.mcp_server_url,
+                    timeout=30.0,
+                    headers={
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    }
+                )
 
                 # FastMCP HTTP transport uses JSON-RPC at /mcp endpoint
                 # Initialize connection
