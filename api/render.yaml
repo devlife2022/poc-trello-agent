@@ -19,7 +19,7 @@ services:
       - key: TRELLO_DEFAULT_BOARD_ID
         sync: false
       - key: MCP_SERVER_URL
-        value: https://trello-ai-mcp.onrender.com
+        value: https://trello-ai-mcp.onrender.com/mcp
       - key: CORS_ORIGINS
         value: https://YOUR_GITHUB_USERNAME.github.io
       - key: PYTHON_VERSION
