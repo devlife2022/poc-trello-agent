@@ -35,13 +35,40 @@ class MCPClient:
                 logger.info(f"Connecting to MCP server via HTTP: {settings.mcp_server_url}")
                 self._http_client = httpx.AsyncClient(base_url=settings.mcp_server_url, timeout=30.0)
 
-                # Fetch tools from HTTP endpoint
-                response = await self._http_client.get("/mcp/v1/tools")
+                # FastMCP's http_app uses JSON-RPC over HTTP POST
+                # Initialize connection
+                init_request = {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "initialize",
+                    "params": {
+                        "protocolVersion": "2024-11-05",
+                        "capabilities": {},
+                        "clientInfo": {"name": "trello-ai-backend", "version": "1.0.0"}
+                    }
+                }
+                response = await self._http_client.post("/", json=init_request)
                 response.raise_for_status()
-                tools_data = response.json()
 
-                # Convert to Claude format
-                self.tools = tools_data.get("tools", [])
+                # List tools
+                tools_request = {
+                    "jsonrpc": "2.0",
+                    "id": 2,
+                    "method": "tools/list",
+                    "params": {}
+                }
+                response = await self._http_client.post("/", json=tools_request)
+                response.raise_for_status()
+                tools_response = response.json()
+
+                # Extract and convert tools
+                mcp_tools = tools_response.get("result", {}).get("tools", [])
+                self.tools = [{
+                    "name": tool["name"],
+                    "description": tool.get("description", ""),
+                    "input_schema": tool.get("inputSchema", {})
+                } for tool in mcp_tools]
+
                 self._connected = True
                 logger.info(f"Connected to MCP server via HTTP, loaded {len(self.tools)} tools")
             else:
@@ -130,15 +157,27 @@ class MCPClient:
             logger.info(f"Executing tool: {tool_name} with input: {tool_input}")
 
             if self._use_http:
-                # Execute via HTTP
-                response = await self._http_client.post(
-                    f"/mcp/v1/tools/{tool_name}/call",
-                    json=tool_input
-                )
+                # Execute via HTTP using JSON-RPC
+                tool_request = {
+                    "jsonrpc": "2.0",
+                    "id": 3,
+                    "method": "tools/call",
+                    "params": {
+                        "name": tool_name,
+                        "arguments": tool_input
+                    }
+                }
+                response = await self._http_client.post("/", json=tool_request)
                 response.raise_for_status()
-                result = response.json()
+                rpc_response = response.json()
+
+                # Extract result from JSON-RPC response
+                if "error" in rpc_response:
+                    raise Exception(f"Tool execution error: {rpc_response['error']}")
+
+                result = rpc_response.get("result", {})
                 logger.debug(f"Tool {tool_name} result: {result}")
-                return result
+                return result.get("content", [{}])[0].get("text", result)
             else:
                 # Execute via STDIO
                 result = await self.session.call_tool(tool_name, tool_input)
