@@ -104,7 +104,9 @@ function App() {
       {/* Header with orb */}
       <header className="app-header">
         <h1 className="app-title">Trello AI Assistant</h1>
-        <StatusOrb status={orbStatus} />
+        <div className="header-center">
+          <StatusOrb status={orbStatus} />
+        </div>
         {isLocked && (
           <button className="new-chat-button" onClick={handleNewChat}>
             <svg

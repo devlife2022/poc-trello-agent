@@ -20,7 +20,9 @@ export function StatusOrb({ status }: StatusOrbProps) {
         <div className="orb-glow"></div>
         <div className="orb-pulse"></div>
       </div>
-      <div className="status-label">{STATUS_LABELS[status]}</div>
+      <div className="status-label-wrapper">
+        <div className="status-label">{STATUS_LABELS[status]}</div>
+      </div>
     </div>
   );
 }

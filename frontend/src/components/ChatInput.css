@@ -1,8 +1,11 @@
 .chat-input-container {
+  position: sticky;
+  bottom: 0;
   padding: 1.5rem;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(27, 39, 53, 0.95);
   backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(102, 126, 234, 0.2);
+  z-index: 100;
 }
 
 .chat-input-wrapper {

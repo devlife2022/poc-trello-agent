@@ -1,24 +1,24 @@
 .status-orb-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   gap: 1rem;
-  padding: 2rem 0;
 }
 
 .status-orb {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .orb-core {
   position: relative;
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   z-index: 3;
   transition: all 0.3s ease;
@@ -106,13 +106,18 @@
   border: 2px solid rgba(239, 68, 68, 0.6);
 }
 
+.status-label-wrapper {
+  min-width: 120px;
+}
+
 .status-label {
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.9);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
 }
 
 /* Animations */
