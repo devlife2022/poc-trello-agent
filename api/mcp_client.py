@@ -4,9 +4,9 @@ Supports both STDIO (local) and HTTP (production) modes.
 """
 from typing import Any, Dict, List, Optional
 import logging
-import httpx
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
+from fastmcp import Client as FastMCPClient
 from config import settings
 
 logger = logging.getLogger(__name__)
@@ -21,7 +21,8 @@ class MCPClient:
         self.tools: List[Dict[str, Any]] = []
         self._connected = False
         self._stdio_context = None
-        self._http_client: Optional[httpx.AsyncClient] = None
+        self._fastmcp_client: Optional[FastMCPClient] = None
+        self._fastmcp_context = None
         self._use_http = bool(settings.mcp_server_url)
 
     async def connect(self) -> None:
@@ -31,50 +32,25 @@ class MCPClient:
 
         try:
             if self._use_http:
-                # Production: Connect via HTTP
+                # Production: Connect via HTTP using FastMCP Client
                 logger.info(f"Connecting to MCP server via HTTP: {settings.mcp_server_url}")
-                self._http_client = httpx.AsyncClient(
-                    base_url=settings.mcp_server_url,
-                    timeout=30.0,
-                    headers={
-                        "Content-Type": "application/json",
-                        "Accept": "application/json"
-                    }
-                )
 
-                # FastMCP HTTP transport uses JSON-RPC at /mcp endpoint
-                # Initialize connection
-                init_request = {
-                    "jsonrpc": "2.0",
-                    "id": 1,
-                    "method": "initialize",
-                    "params": {
-                        "protocolVersion": "2024-11-05",
-                        "capabilities": {},
-                        "clientInfo": {"name": "trello-ai-backend", "version": "1.0.0"}
-                    }
-                }
-                response = await self._http_client.post("/mcp", json=init_request)
-                response.raise_for_status()
+                # Create FastMCP client with the server URL
+                self._fastmcp_client = FastMCPClient(settings.mcp_server_url)
 
-                # List tools
-                tools_request = {
-                    "jsonrpc": "2.0",
-                    "id": 2,
-                    "method": "tools/list",
-                    "params": {}
-                }
-                response = await self._http_client.post("/mcp", json=tools_request)
-                response.raise_for_status()
-                tools_response = response.json()
+                # Enter the client context
+                self._fastmcp_context = self._fastmcp_client
+                await self._fastmcp_context.__aenter__()
 
-                # Extract and convert tools
-                mcp_tools = tools_response.get("result", {}).get("tools", [])
+                # List tools using FastMCP client
+                tools_response = await self._fastmcp_client.list_tools()
+
+                # Convert tools to Claude format
                 self.tools = [{
-                    "name": tool["name"],
-                    "description": tool.get("description", ""),
-                    "input_schema": tool.get("inputSchema", {})
-                } for tool in mcp_tools]
+                    "name": tool.name,
+                    "description": tool.description or "",
+                    "input_schema": tool.inputSchema if hasattr(tool, 'inputSchema') else {"type": "object", "properties": {}}
+                } for tool in tools_response]
 
                 self._connected = True
                 logger.info(f"Connected to MCP server via HTTP, loaded {len(self.tools)} tools")
@@ -111,8 +87,8 @@ class MCPClient:
     async def disconnect(self) -> None:
         """Disconnect from the MCP server."""
         try:
-            if self._http_client:
-                await self._http_client.aclose()
+            if self._fastmcp_context:
+                await self._fastmcp_context.__aexit__(None, None, None)
             if self.session:
                 await self.session.__aexit__(None, None, None)
             if self._stdio_context:
@@ -164,27 +140,10 @@ class MCPClient:
             logger.info(f"Executing tool: {tool_name} with input: {tool_input}")
 
             if self._use_http:
-                # Execute via HTTP using JSON-RPC at /mcp endpoint
-                tool_request = {
-                    "jsonrpc": "2.0",
-                    "id": 3,
-                    "method": "tools/call",
-                    "params": {
-                        "name": tool_name,
-                        "arguments": tool_input
-                    }
-                }
-                response = await self._http_client.post("/mcp", json=tool_request)
-                response.raise_for_status()
-                rpc_response = response.json()
-
-                # Extract result from JSON-RPC response
-                if "error" in rpc_response:
-                    raise Exception(f"Tool execution error: {rpc_response['error']}")
-
-                result = rpc_response.get("result", {})
+                # Execute via HTTP using FastMCP Client
+                result = await self._fastmcp_client.call_tool(tool_name, tool_input)
                 logger.debug(f"Tool {tool_name} result: {result}")
-                return result.get("content", [{}])[0].get("text", result)
+                return result
             else:
                 # Execute via STDIO
                 result = await self.session.call_tool(tool_name, tool_input)
