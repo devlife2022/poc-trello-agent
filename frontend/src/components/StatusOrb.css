@@ -175,3 +175,55 @@
     transform: translateX(5px);
   }
 }
+
+/* Responsive - Compact orb for mobile */
+@media (max-width: 768px) {
+  .status-orb-container {
+    gap: 0.5rem;
+  }
+
+  .status-orb {
+    width: 45px;
+    height: 45px;
+  }
+
+  .orb-core {
+    width: 30px;
+    height: 30px;
+  }
+
+  .status-label-wrapper {
+    min-width: 90px;
+  }
+
+  .status-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
+  }
+}
+
+/* Extra compact for very small screens */
+@media (max-width: 480px) {
+  .status-orb-container {
+    gap: 0.4rem;
+  }
+
+  .status-orb {
+    width: 35px;
+    height: 35px;
+  }
+
+  .orb-core {
+    width: 24px;
+    height: 24px;
+  }
+
+  .status-label-wrapper {
+    min-width: 70px;
+  }
+
+  .status-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.3px;
+  }
+}
