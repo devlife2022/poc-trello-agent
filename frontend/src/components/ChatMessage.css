@@ -37,7 +37,97 @@
   color: rgba(255, 255, 255, 0.95);
   line-height: 1.6;
   word-wrap: break-word;
-  white-space: pre-wrap;
+}
+
+/* Markdown element styling */
+.message-content p {
+  margin: 0.5rem 0;
+}
+
+.message-content p:first-child {
+  margin-top: 0;
+}
+
+.message-content p:last-child {
+  margin-bottom: 0;
+}
+
+.message-content strong {
+  font-weight: 700;
+  color: rgba(255, 255, 255, 1);
+}
+
+.message-content em {
+  font-style: italic;
+}
+
+.message-content code {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.message-content pre {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 0.75rem 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.message-content pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.875em;
+}
+
+.message-content ul,
+.message-content ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.message-content li {
+  margin: 0.25rem 0;
+}
+
+.message-content a {
+  color: rgba(96, 165, 250, 1);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.message-content a:hover {
+  color: rgba(147, 197, 253, 1);
+  text-decoration: underline;
+}
+
+.message-content h1,
+.message-content h2,
+.message-content h3,
+.message-content h4,
+.message-content h5,
+.message-content h6 {
+  margin: 1rem 0 0.5rem 0;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 1);
+}
+
+.message-content h1 { font-size: 1.5em; }
+.message-content h2 { font-size: 1.3em; }
+.message-content h3 { font-size: 1.1em; }
+
+.message-content blockquote {
+  border-left: 3px solid rgba(168, 85, 247, 0.5);
+  padding-left: 1rem;
+  margin: 0.75rem 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-style: italic;
 }
 
 .message-time {

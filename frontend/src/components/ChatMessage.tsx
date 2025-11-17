@@ -1,5 +1,6 @@
 import type { Message } from '../types';
 import './ChatMessage.css';
+import ReactMarkdown from 'react-markdown';
 
 interface ChatMessageProps {
   message: Message;
@@ -14,7 +15,9 @@ export function ChatMessage({ message }: ChatMessageProps) {
   return (
     <div className={`chat-message chat-message--${message.role}`}>
       <div className="message-bubble">
-        <div className="message-content">{message.content}</div>
+        <div className="message-content">
+          <ReactMarkdown>{message.content}</ReactMarkdown>
+        </div>
         <div className="message-time">{formattedTime}</div>
       </div>
     </div>
