@@ -105,6 +105,7 @@ class ClaudeService:
                     })
 
                     logger.info(f"Conversation completed in {iteration} iterations")
+                    logger.info(f"Returning created_tickets: {created_tickets}")
 
                     return {
                         "message": final_text,
@@ -132,9 +133,13 @@ class ClaudeService:
 
                         # Track created tickets
                         if tool_name == "create_trello_card":
+                            logger.info(f"create_trello_card called with input: {tool_input}")
+                            logger.info(f"Result type: {type(result)}, Result: {result}")
                             ticket_info = self._extract_ticket_info(result, tool_input)
+                            logger.info(f"Extracted ticket_info: {ticket_info}")
                             if ticket_info:
                                 created_tickets.append(ticket_info)
+                                logger.info(f"Total created_tickets: {len(created_tickets)}")
 
                         # Format result for Claude
                         result_content = self._format_tool_result(result)
@@ -264,7 +269,9 @@ class ClaudeService:
             }
 
         except Exception as e:
-            logger.error(f"Error extracting ticket info: {e}")
+            logger.error(f"Error extracting ticket info: {e}", exc_info=True)
+            logger.error(f"Result was: {result}")
+            logger.error(f"Tool input was: {tool_input}")
             return None
 
     def _format_tool_result(self, result: Any) -> str:

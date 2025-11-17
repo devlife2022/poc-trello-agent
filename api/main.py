@@ -118,6 +118,7 @@ async def chat(request: ChatRequest) -> ChatResponse:
         return ChatResponse(
             message=result["message"],
             tool_calls=result.get("tool_calls", []),
+            created_tickets=result.get("created_tickets", []),
             requires_new_chat=result.get("requires_new_chat", False),
             error=result.get("error")
         )
