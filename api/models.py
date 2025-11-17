@@ -19,10 +19,20 @@ class ToolCall(BaseModel):
     error: Optional[str] = Field(None, description="Error message if status is error")
 
 
+class CreatedTicket(BaseModel):
+    """Information about a created Trello ticket."""
+    id: str = Field(..., description="Trello card ID")
+    name: str = Field(..., description="Ticket title")
+    url: str = Field(..., description="URL to the Trello card")
+    board_name: str = Field(..., description="Name of the board the ticket was created on")
+    list_name: str = Field(..., description="Name of the list the ticket was created in")
+
+
 class ChatResponse(BaseModel):
     """Response model for chat endpoint."""
     message: str = Field(..., description="Assistant's response message")
     tool_calls: List[ToolCall] = Field(default_factory=list, description="List of tool calls made")
+    created_tickets: List[CreatedTicket] = Field(default_factory=list, description="List of tickets created during this response")
     requires_new_chat: bool = Field(default=False, description="Whether this response requires starting a new chat (e.g., Trello card was created)")
     error: Optional[str] = Field(None, description="Error message if request failed")
 

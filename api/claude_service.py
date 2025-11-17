@@ -61,6 +61,9 @@ class ClaudeService:
         # Track tool calls made
         tool_calls_made: List[ToolCall] = []
 
+        # Track created tickets
+        created_tickets = []
+
         # Track if any action-requiring tools were executed (tools that modify Trello)
         action_tools_executed = False
         action_tool_names = set()  # Empty set - don't auto-lock after ticket creation (allows multi-ticket conversations)
@@ -106,6 +109,7 @@ class ClaudeService:
                     return {
                         "message": final_text,
                         "tool_calls": tool_calls_made,
+                        "created_tickets": created_tickets,
                         "requires_new_chat": action_tools_executed,
                         "updated_history": messages
                     }
@@ -125,6 +129,12 @@ class ClaudeService:
                         # Check if this is an action tool that was successfully executed
                         if tool_name in action_tool_names:
                             action_tools_executed = True
+
+                        # Track created tickets
+                        if tool_name == "create_trello_card":
+                            ticket_info = self._extract_ticket_info(result, tool_input)
+                            if ticket_info:
+                                created_tickets.append(ticket_info)
 
                         # Format result for Claude
                         result_content = self._format_tool_result(result)
@@ -179,6 +189,7 @@ class ClaudeService:
         return {
             "message": "I apologize, but I'm having trouble completing this request. Please try again or rephrase your question.",
             "tool_calls": tool_calls_made,
+            "created_tickets": created_tickets,
             "requires_new_chat": action_tools_executed,
             "updated_history": messages,
             "error": "Max iterations reached"
@@ -202,6 +213,59 @@ class ClaudeService:
         routing_info += "\nIMPORTANT: Always include the board_id parameter when calling create_trello_card to ensure tickets are created on the correct board."
 
         return routing_info
+
+    def _extract_ticket_info(self, result: Any, tool_input: Dict[str, Any]) -> Optional[Dict[str, str]]:
+        """
+        Extract ticket information from create_trello_card result.
+
+        Args:
+            result: Tool execution result
+            tool_input: Original tool input parameters
+
+        Returns:
+            Dictionary with ticket info or None if extraction fails
+        """
+        try:
+            # Parse result if it's a list of ContentBlock objects
+            result_dict = {}
+            if isinstance(result, list):
+                # Extract text from ContentBlock objects
+                for item in result:
+                    if hasattr(item, 'text'):
+                        result_dict = json.loads(item.text)
+                        break
+            elif isinstance(result, str):
+                result_dict = json.loads(result)
+            elif isinstance(result, dict):
+                result_dict = result
+            else:
+                return None
+
+            # Check if card was created successfully
+            if not result_dict.get("success"):
+                return None
+
+            card_data = result_dict.get("card", {})
+            board_id = tool_input.get("board_id", "")
+
+            # Get board name from board_id
+            board_name = "Unknown Board"
+            for req_type, board_config in get_all_boards().items():
+                if board_config["board_id"] == board_id:
+                    board_name = board_config["board_name"]
+                    break
+
+            return {
+                "id": card_data.get("id", ""),
+                "name": card_data.get("name", ""),
+                "url": card_data.get("url", ""),
+                "board_name": board_name,
+                "list_name": card_data.get("list_name", "")
+            }
+
+        except Exception as e:
+            logger.error(f"Error extracting ticket info: {e}")
+            return None
 
     def _format_tool_result(self, result: Any) -> str:
         """

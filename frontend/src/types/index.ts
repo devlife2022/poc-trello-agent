@@ -1,8 +1,17 @@
+export interface CreatedTicket {
+  id: string;
+  name: string;
+  url: string;
+  board_name: string;
+  list_name: string;
+}
+
 export interface Message {
   id: string;
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+  created_tickets?: CreatedTicket[];
 }
 
 export interface ToolCall {
@@ -19,6 +28,7 @@ export interface ChatRequest {
 export interface ChatResponse {
   message: string;
   tool_calls?: ToolCall[];
+  created_tickets?: CreatedTicket[];
   requires_new_chat?: boolean;
   error?: string;
 }

@@ -48,6 +48,7 @@ function App() {
         role: 'assistant',
         content: response.message,
         timestamp: new Date(),
+        created_tickets: response.created_tickets,
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
