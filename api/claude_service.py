@@ -63,7 +63,7 @@ class ClaudeService:
 
         # Track if any action-requiring tools were executed (tools that modify Trello)
         action_tools_executed = False
-        action_tool_names = {"create_trello_card"}  # Tools that modify Trello and require new chat
+        action_tool_names = set()  # Empty set - don't auto-lock after ticket creation (allows multi-ticket conversations)
 
         # Tool execution loop
         max_iterations = 10  # Prevent infinite loops
