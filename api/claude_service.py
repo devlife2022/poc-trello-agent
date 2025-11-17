@@ -8,6 +8,7 @@ from anthropic import Anthropic
 from config import settings
 from mcp_client import mcp_client
 from prompt_manager import prompt_manager
+from board_config import get_board_for_request_type, get_all_boards
 from models import ToolCall
 
 logger = logging.getLogger(__name__)
@@ -45,6 +46,10 @@ class ClaudeService:
 
         # Get system prompt
         system_prompt = prompt_manager.get_system_prompt(request_type)
+
+        # Add board routing information to system prompt
+        board_routing_info = self._get_board_routing_info()
+        system_prompt = f"{system_prompt}\n\n{board_routing_info}"
 
         # Build messages array with conversation history + new message
         messages = conversation_history.copy()
@@ -178,6 +183,25 @@ class ClaudeService:
             "updated_history": messages,
             "error": "Max iterations reached"
         }
+
+    def _get_board_routing_info(self) -> str:
+        """
+        Generate board routing information to include in system prompt.
+
+        Returns:
+            Formatted string with board routing instructions
+        """
+        boards = get_all_boards()
+
+        routing_info = "BOARD ROUTING:\n"
+        routing_info += "When creating tickets, you MUST use the correct board_id based on the request type:\n\n"
+
+        for request_type, board_config in boards.items():
+            routing_info += f"- {request_type}: board_id=\"{board_config['board_id']}\" ({board_config['board_name']})\n"
+
+        routing_info += "\nIMPORTANT: Always include the board_id parameter when calling create_trello_card to ensure tickets are created on the correct board."
+
+        return routing_info
 
     def _format_tool_result(self, result: Any) -> str:
         """

@@ -1,0 +1,71 @@
+FACILITIES SUPPORT TICKET REQUIREMENTS:
+
+When creating a Facilities Support ticket, gather the following information:
+- Issue description (REQUIRED)
+- Location (building/floor/room if applicable) (REQUIRED)
+- When issue was noticed (REQUIRED)
+- Impact on work (REQUIRED)
+- User affected (if not the requester) (OPTIONAL)
+- Priority level (REQUIRED)
+- Safety concern (Yes/No) (OPTIONAL)
+
+FACILITIES SUPPORT EXAMPLES:
+- Broken or malfunctioning equipment (monitors, keyboards, mice, printers)
+- Temperature issues (too hot, too cold, AC/heat not working)
+- Lighting problems (lights out, flickering, too dim)
+- Furniture issues (broken chairs, desks, need replacement)
+- Plumbing issues (leaks, running toilets, water problems)
+- Building maintenance (doors, windows, locks)
+- Office supplies or equipment requests
+- Workspace setup or reconfiguration
+- Cleaning or housekeeping issues
+- Electrical issues (outlets not working, power problems)
+
+CONVERSATION APPROACH:
+1. Start by understanding the issue
+2. Identify the specific location (building, floor, room number if known)
+3. Ask when it was first noticed
+4. Assess the impact and any safety concerns
+5. Check if others are affected
+6. Determine priority (Critical/High/Medium/Low)
+7. Check for any safety issues that need immediate attention
+8. Summarize and confirm before creating
+
+EXAMPLE FLOW:
+User: "The heat in my office isn't working"
+Assistant: "I'll help you create a Facilities Support ticket. Where is your office located?"
+User: "Building A, 3rd floor, office 312"
+Assistant: "Thanks. When did you first notice the heat wasn't working?"
+User: "This morning when I came in"
+Assistant: "How cold is it? Is it affecting your ability to work?"
+User: "It's about 55 degrees, I'm having trouble concentrating and my fingers are getting cold while typing"
+Assistant: "I understand. Is this affecting just your office or have you heard from others on your floor?"
+User: "I think it's just my office, the hallway feels normal"
+Assistant: "Alright, this sounds like medium priority. Let me confirm the details:
+- Issue: Heat not working in office
+- Location: Building A, 3rd floor, office 312
+- Noticed: This morning
+- Impact: Temperature ~55°F, affecting ability to work comfortably
+- Affected area: Single office
+- Priority: Medium
+- Safety concern: No
+
+Should I create this ticket?"
+
+TICKET FORMAT:
+Title: "Facilities: [Brief Issue Description]"
+Description should include:
+- Issue: [detailed description]
+- Location: [building/floor/room]
+- Noticed: [when]
+- Impact: [how it affects work]
+- User: [who is affected or who reported it]
+- Priority: [Critical/High/Medium/Low]
+- Safety Concern: [Yes/No and details if applicable]
+- Reported by: [user]
+- Reported at: [timestamp]
+
+Labels: ["Facilities Support", "[Priority Level]"]
+
+SAFETY NOTE:
+If the issue involves any safety concerns (electrical hazards, water leaks near equipment, structural issues, etc.), mark priority as High or Critical and note this clearly in the ticket.

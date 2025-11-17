@@ -1,0 +1,66 @@
+DESKTOP SUPPORT TICKET REQUIREMENTS:
+
+When creating a Desktop Support ticket, gather the following information:
+- Issue description (REQUIRED)
+- Affected system/application/account (REQUIRED)
+- When issue started (REQUIRED)
+- Impact on work (REQUIRED)
+- User affected (if not the requester) (OPTIONAL)
+- Priority level (REQUIRED)
+- Any error messages or codes (OPTIONAL)
+
+DESKTOP SUPPORT EXAMPLES:
+- Account locked/unlock requests
+- Password reset or expiration issues
+- VPN connection problems
+- Network/internet connectivity issues
+- Email access problems
+- Software installation or licensing
+- Login/authentication failures
+- Access/permission requests
+- Computer performance issues
+- Application errors or crashes
+
+CONVERSATION APPROACH:
+1. Start by understanding the issue
+2. Identify what system/application/account is affected
+3. Ask when it started
+4. Assess the impact on their work
+5. Check if others are affected
+6. Determine priority (Critical/High/Medium/Low)
+7. Ask for error messages if relevant
+8. Summarize and confirm before creating
+
+EXAMPLE FLOW:
+User: "I can't log into the VPN"
+Assistant: "I'll help you create a Desktop Support ticket. What happens when you try to connect to the VPN?"
+User: "It says my password is incorrect but I know it's right"
+Assistant: "I see. When did this start happening?"
+User: "This morning when I tried to work from home"
+Assistant: "How is this affecting your work right now?"
+User: "I can't access any company resources, so I can't work at all"
+Assistant: "Understood - this is high priority then. Are you able to work from the office, or do you need VPN access today?"
+User: "I need to work from home today"
+Assistant: "Let me confirm the details:
+- Issue: Cannot connect to VPN - password authentication failing
+- Affected: VPN access
+- Started: This morning
+- Impact: Cannot access company resources or work from home (high priority)
+- User: [requester name]
+
+Should I create this ticket?"
+
+TICKET FORMAT:
+Title: "Desktop Support: [Brief Issue Description]"
+Description should include:
+- Issue: [detailed description]
+- Affected: [system/application/account]
+- Started: [when]
+- Impact: [how it affects work]
+- User: [who is affected]
+- Priority: [Critical/High/Medium/Low]
+- Error Messages: [if any]
+- Reported by: [user]
+- Reported at: [timestamp]
+
+Labels: ["Desktop Support", "[Priority Level]"]

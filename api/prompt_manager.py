@@ -36,7 +36,7 @@ class PromptManager:
                 self.base_prompt = self._get_fallback_base_prompt()
 
             # Load request type prompts
-            request_types = ["missing_report", "new_report", "it_support", "enhancement_request"]
+            request_types = ["missing_report", "new_report", "desktop_support", "facilities_support", "enhancement_request"]
             for request_type in request_types:
                 prompt_path = self.prompts_dir / f"{request_type}.txt"
                 if prompt_path.exists():
