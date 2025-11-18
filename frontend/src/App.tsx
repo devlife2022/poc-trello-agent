@@ -102,12 +102,9 @@ function App() {
         <div className="stars3"></div>
       </div>
 
-      {/* Header with orb */}
+      {/* Header without orb */}
       <header className="app-header">
-        <h1 className="app-title">Trello AI Assistant</h1>
-        <div className="header-center">
-          <StatusOrb status={orbStatus} />
-        </div>
+        <h1 className="app-title">Trello AI Agent</h1>
         {isLocked && (
           <button className="new-chat-button" onClick={handleNewChat}>
             <svg
@@ -133,30 +130,45 @@ function App() {
         <div className="chat-messages">
           {messages.length === 0 ? (
             <div className="welcome-message">
-              <h2>Welcome to Trello AI Assistant</h2>
-              <p>I can help you:</p>
+              <div className="welcome-orb">
+                <StatusOrb status={orbStatus} showInChat={false} />
+              </div>
               <ul>
-                <li>Find information about existing Trello tickets</li>
-                <li>Create new tickets for missing reports</li>
-                <li>Create new report requests</li>
-                <li>Handle IT support issues</li>
-                <li>Submit enhancement requests and feedback</li>
+                <li>Find information about existing tickets</li>
+                <li>Create Engineering Tickets</li>
+                <li>Create Facilities Support Tickets</li>
+                <li>Create Desktop Support Tickets</li>
               </ul>
               <p className="hint">Start by typing your request below...</p>
+
+              {/* Input inline with welcome message */}
+              <div className="welcome-input">
+                <ChatInput onSendMessage={handleSendMessage} disabled={isLocked} isWelcome={true} />
+              </div>
             </div>
           ) : (
             <>
               {messages.map((message) => (
                 <ChatMessage key={message.id} message={message} />
               ))}
-              <div ref={messagesEndRef} />
             </>
           )}
+
+          {/* Orb at bottom of chat */}
+          {messages.length > 0 && (
+            <div className="orb-wrapper">
+              <StatusOrb status={orbStatus} showInChat={true} />
+            </div>
+          )}
+
+          <div ref={messagesEndRef} />
         </div>
       </main>
 
-      {/* Input */}
-      <ChatInput onSendMessage={handleSendMessage} disabled={isLocked} />
+      {/* Input - only show when messages exist */}
+      {messages.length > 0 && (
+        <ChatInput onSendMessage={handleSendMessage} disabled={isLocked} isWelcome={false} />
+      )}
     </div>
   );
 }

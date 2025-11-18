@@ -5,6 +5,12 @@
   gap: 1rem;
 }
 
+.status-orb-container--in-chat {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .status-orb {
   position: relative;
   width: 60px;
@@ -15,86 +21,130 @@
   flex-shrink: 0;
 }
 
+.status-orb-container--in-chat .status-orb {
+  width: 50px;
+  height: 50px;
+}
+
 .orb-core {
   position: relative;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: 30%;
   z-index: 3;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
+  overflow: hidden;
+}
+
+.orb-core::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  right: 15%;
+  width: 30%;
+  height: 30%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6), transparent 60%);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.status-orb-container--in-chat .orb-core {
+  width: 35px;
+  height: 35px;
 }
 
 .orb-glow {
   position: absolute;
   width: 100%;
   height: 100%;
-  border-radius: 50%;
+  border-radius: 30%;
   filter: blur(20px);
   z-index: 1;
   animation: pulse 2s ease-in-out infinite;
+  transition: all 0.4s ease;
+}
+
+.status-orb-container--in-chat .orb-glow {
+  filter: blur(15px);
 }
 
 .orb-pulse {
   position: absolute;
   width: 80%;
   height: 80%;
-  border-radius: 50%;
+  border-radius: 30%;
   z-index: 2;
   animation: ripple 2s ease-out infinite;
 }
 
-/* Ready state - Calm blue */
+/* Ready state - Calm ethereal teal with gentle pulse */
 .status-orb--ready .orb-core {
-  background: radial-gradient(circle at 30% 30%, #6eb5ff, #1e40af);
-  box-shadow: 0 0 30px rgba(59, 130, 246, 0.8);
+  background: radial-gradient(circle at 30% 30%, #5eead4, #14b8a6);
+  box-shadow:
+    0 0 25px rgba(20, 184, 166, 0.7),
+    inset -5px -5px 15px rgba(255, 255, 255, 0.1),
+    inset 3px 3px 10px rgba(0, 0, 0, 0.2);
+  animation: gentlePulse 3s ease-in-out infinite, rotateGradient 8s linear infinite;
 }
 
 .status-orb--ready .orb-glow {
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.6), transparent);
+  background: radial-gradient(circle, rgba(20, 184, 166, 0.5), transparent);
+  animation: gentleGlow 3s ease-in-out infinite;
 }
 
 .status-orb--ready .orb-pulse {
-  border: 2px solid rgba(59, 130, 246, 0.4);
+  display: none;
 }
 
-/* Processing state - Pulsing purple */
+/* Processing state - Intense pulsing purple with energy */
 .status-orb--processing .orb-core {
   background: radial-gradient(circle at 30% 30%, #c084fc, #7c3aed);
-  box-shadow: 0 0 40px rgba(168, 85, 247, 1);
-  animation: throb 1.5s ease-in-out infinite;
+  box-shadow:
+    0 0 40px rgba(168, 85, 247, 1),
+    0 0 60px rgba(168, 85, 247, 0.6),
+    inset -5px -5px 15px rgba(255, 255, 255, 0.15),
+    inset 3px 3px 10px rgba(0, 0, 0, 0.3);
+  animation: throb 1.2s ease-in-out infinite, rotateGradient 6s linear infinite;
 }
 
 .status-orb--processing .orb-glow {
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.8), transparent);
-  animation: pulse 1s ease-in-out infinite;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.9), transparent);
+  animation: intensePulse 1.2s ease-in-out infinite;
 }
 
 .status-orb--processing .orb-pulse {
-  border: 2px solid rgba(168, 85, 247, 0.6);
-  animation: ripple 1.5s ease-out infinite;
+  border: 2px solid rgba(168, 85, 247, 0.7);
+  animation: ripple 1.2s ease-out infinite;
 }
 
-/* Communicating state - Animated cyan/green */
+/* Communicating state - Vibrant animated emerald with shimmer */
 .status-orb--communicating .orb-core {
   background: radial-gradient(circle at 30% 30%, #34d399, #059669);
-  box-shadow: 0 0 40px rgba(16, 185, 129, 1);
-  animation: rotate-hue 3s linear infinite;
+  box-shadow:
+    0 0 35px rgba(16, 185, 129, 1),
+    0 0 55px rgba(16, 185, 129, 0.6),
+    inset -5px -5px 15px rgba(255, 255, 255, 0.12),
+    inset 3px 3px 10px rgba(0, 0, 0, 0.25);
+  animation: shimmerPulse 2s ease-in-out infinite, rotateGradient 5s linear infinite;
 }
 
 .status-orb--communicating .orb-glow {
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.8), transparent);
-  animation: pulse 0.8s ease-in-out infinite;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.85), transparent);
+  animation: communicateGlow 1.5s ease-in-out infinite;
 }
 
 .status-orb--communicating .orb-pulse {
-  border: 2px solid rgba(16, 185, 129, 0.6);
-  animation: ripple 1s ease-out infinite;
+  border: 2px solid rgba(16, 185, 129, 0.65);
+  animation: ripple 1.5s ease-out infinite;
 }
 
 /* Error state - Red warning */
 .status-orb--error .orb-core {
   background: radial-gradient(circle at 30% 30%, #f87171, #dc2626);
-  box-shadow: 0 0 40px rgba(239, 68, 68, 1);
+  box-shadow:
+    0 0 40px rgba(239, 68, 68, 1),
+    inset -5px -5px 15px rgba(255, 255, 255, 0.1),
+    inset 3px 3px 10px rgba(0, 0, 0, 0.3);
   animation: shake 0.5s ease-in-out;
 }
 
@@ -103,21 +153,31 @@
 }
 
 .status-orb--error .orb-pulse {
-  border: 2px solid rgba(239, 68, 68, 0.6);
+  display: none;
 }
 
 .status-label-wrapper {
   min-width: 120px;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.status-orb-container--in-chat .status-label-wrapper {
+  min-width: auto;
 }
 
 .status-label {
+  font-family: 'Comfortaa', cursive;
   font-size: 0.9rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.9);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.05em;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
   white-space: nowrap;
+}
+
+.status-orb-container--in-chat .status-label {
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
 }
 
 /* Animations */
@@ -176,6 +236,93 @@
   }
 }
 
+/* New gentle animations for ready state */
+@keyframes gentlePulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes gentleGlow {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes gentleRipple {
+  0% {
+    opacity: 0.8;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.3);
+  }
+}
+
+/* Intense animations for processing state */
+@keyframes intensePulse {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+/* Shimmer animations for communicating state */
+@keyframes shimmerPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.08);
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes communicateGlow {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.12) rotate(5deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rotateGradient {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
 /* Responsive - Compact orb for mobile */
 @media (max-width: 768px) {
   .status-orb-container {
@@ -198,7 +345,7 @@
 
   .status-label {
     font-size: 0.7rem;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.05em;
   }
 }
 
@@ -224,6 +371,6 @@
 
   .status-label {
     font-size: 0.6rem;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.05em;
   }
 }

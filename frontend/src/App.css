@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;600;700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -224,34 +226,45 @@
   top: 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 1rem 2rem;
-  background: rgba(27, 39, 53, 0.95);
+  background: rgba(27, 39, 53, 0.7);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(102, 126, 234, 0.2);
-  z-index: 100;
-  min-height: 80px;
+  border-bottom: none;
+  z-index: 1000;
+  min-height: 60px;
+}
+
+/* Gradient fade-out effect at bottom of header */
+.app-header::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: linear-gradient(
+    to bottom,
+    rgba(102, 126, 234, 0.3) 0%,
+    rgba(102, 126, 234, 0.1) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
 }
 
 .app-title {
+  font-family: 'Comfortaa', cursive;
   font-size: 1.5rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
+  letter-spacing: 0.05em;
+  color: #667eea;
+  text-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
   white-space: nowrap;
 }
 
-.header-center {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .new-chat-button {
+  position: absolute;
+  right: 2rem;
   padding: 0.75rem 1.5rem;
   background: linear-gradient(135deg, #667eea, #764ba2);
   border: none;
@@ -295,6 +308,26 @@
   gap: 0.5rem;
 }
 
+/* Orb wrapper at bottom of chat */
+.orb-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  padding: 1rem 0;
+  margin-top: 0.5rem;
+  animation: fadeInOrb 0.4s ease-out;
+}
+
+@keyframes fadeInOrb {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Welcome Message */
 .welcome-message {
   text-align: center;
@@ -310,6 +343,19 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.welcome-orb {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0 2.5rem 0;
+}
+
+.welcome-input {
+  margin-top: 2.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .welcome-message p {
@@ -361,23 +407,16 @@
   .app-header {
     padding: 0.5rem 0.75rem;
     min-height: 60px;
-    gap: 0.5rem;
   }
 
   .app-title {
     font-size: 0.9rem;
-    flex-shrink: 1;
-    min-width: 0;
-  }
-
-  .header-center {
-    flex: 0 0 auto;
   }
 
   .new-chat-button {
+    right: 0.75rem;
     padding: 0.4rem 0.8rem;
     font-size: 0.75rem;
-    flex-shrink: 0;
   }
 
   .new-chat-button svg {
@@ -410,6 +449,7 @@
   }
 
   .new-chat-button {
+    right: 0.5rem;
     padding: 0.3rem 0.6rem;
     font-size: 0.7rem;
     gap: 0.25rem;

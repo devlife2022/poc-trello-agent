@@ -1,19 +1,25 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './ChatInput.css';
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
   disabled: boolean;
+  isWelcome: boolean;
 }
 
-export function ChatInput({ onSendMessage, disabled }: ChatInputProps) {
+export function ChatInput({ onSendMessage, disabled, isWelcome }: ChatInputProps) {
   const [input, setInput] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim() && !disabled) {
       onSendMessage(input.trim());
       setInput('');
+      // Reset textarea height after submit
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto';
+      }
     }
   };
 
@@ -24,17 +30,34 @@ export function ChatInput({ onSendMessage, disabled }: ChatInputProps) {
     }
   };
 
+  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInput(e.target.value);
+    // Auto-resize textarea
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
+
+  // Reset height when input is cleared
+  useEffect(() => {
+    if (input === '' && textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+    }
+  }, [input]);
+
   return (
-    <form className="chat-input-container" onSubmit={handleSubmit}>
+    <form className={`chat-input-container ${isWelcome ? 'chat-input-container--welcome' : ''}`} onSubmit={handleSubmit}>
       <div className="chat-input-wrapper">
-        <input
-          type="text"
+        <textarea
+          ref={textareaRef}
           className="chat-input"
-          placeholder={disabled ? "Chat locked - Start a new conversation" : "Type your message..."}
+          placeholder={disabled ? "Chat locked - Start a new conversation" : "Type your message... (Shift+Enter for new line)"}
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={handleInput}
           onKeyDown={handleKeyDown}
           disabled={disabled}
+          rows={1}
         />
         <button
           type="submit"
